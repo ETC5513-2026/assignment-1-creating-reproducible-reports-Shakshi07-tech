@@ -1,0 +1,21 @@
+---
+title: "Marketing Spend and Customer Purchases"
+author: "Shakshi"
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: article
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+```
+
