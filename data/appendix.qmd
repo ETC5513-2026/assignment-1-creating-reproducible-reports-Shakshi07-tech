@@ -1,0 +1,22 @@
+---
+title: "Appendix"
+author: "Shakshi"
+format:
+  pdf:
+    fig-cap-location: bottom
+---
+
+# AI USEAGE
+
+This appendix contains notes, and supporting material for the main report.
+
+
+![](Screenshot 1.png)
+![](Screenshot 2.png)
+![](Screenshot 3.png)
+![](Screenshot 4.png)
+![](Screenshot 5.png)
+![](Screenshot 6.png)
+![](Screenshot 7.png)
+
+
