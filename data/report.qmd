@@ -2,15 +2,14 @@
 title: "Marketing Spend and Customer Purchases"
 author: "Shakshi"
 format:
-  html:
-    theme: cosmo
-  pdf:
-    documentclass: article
+  html: default
+  pdf: default
 ---
 
 ```{r}
 #| label: setup
-#| include: false
+#| include: true
+#| warning : false
 
 library(tidyverse)
 library(readr)
@@ -18,4 +17,100 @@ library(dplyr)
 library(ggplot2)
 library(knitr)
 ```
+```{r}
+#| label: load-data
+#| echo: false
 
+data <- read_csv("36748994_Shakshi Shah.csv")
+```
+```{r}
+#| label: clean-data
+#| echo: false
+
+data_clean <- data |>
+  mutate(
+    purchase_amount = as.numeric(purchase_amount),
+    marketing_spend = as.numeric(marketing_spend)
+  ) |>
+  filter(!is.na(marketing_spend), !is.na(purchase_amount))
+```
+
+## Introduction
+
+This report analyses customer-level data from a personalised marketing campaign run by an online retailer.  
+The dataset records how much marketing spend was allocated to each customer and how much they purchased.  
+Our goal is to understand whether higher marketing spend per customer is associated with higher purchase amounts.  
+This insight can help guide future marketing budget decisions.
+
+## Research Question
+
+We investigate whether higher marketing spend per customer leads to higher purchase amounts.  
+Specifically, we examine the relationship between marketing spend and purchase value.  
+We use summary statistics and visualisations to explore this relationship.
+
+## Dataset Introduction
+
+The dataset contains customer IDs, signup dates, marketing spend, number of visits, purchase amounts, customer segments, and notes.  
+It records how much was spent contacting each customer and how much they purchased during the campaign.  
+We cleaned the data by converting numeric fields to the correct type and removing rows with missing purchase amounts.  
+We also ensured that marketing spend values were valid and usable for analysis.  
+This cleaned dataset forms the basis for all summaries and visualisations in this report.
+
+```{r}
+#| label: data-summary
+#| echo: true
+
+n_obs <- nrow(data_clean)
+n_vars <- ncol(data_clean)
+```
+### Dataset Description
+
+The cleaned dataset contains `r n_obs` observations and `r n_vars` variables.
+
+## Summary table
+```{r}
+#| label: tbl-summary
+#| echo: true
+#| tbl-cap: "Summary statistics for marketing spend and purchase amount."
+
+summary_table <- data_clean |>
+  summarise(
+    mean_marketing = mean(marketing_spend),
+    sd_marketing   = sd(marketing_spend),
+    mean_purchase  = mean(purchase_amount),
+    sd_purchase    = sd(purchase_amount)
+  )
+
+knitr::kable(summary_table)
+```
+Table @tbl-summary summarises the average and variability of marketing spend and purchase amounts.
+# Summary table result description
+According to the above-mentioned summary table, it should be concluded that the mean level of marketing spend allocated per customer as well as the mean level of purchase amounts received from customers is moderate. However, based on the standard deviations, it should be said that marketing spend as well as purchase amounts differ greatly from one customer to another, which means that the amount of marketing spend and purchase amounts varies greatly from one customer to another. As for the result, it can be concluded that there is great variation in marketing spend and purchases among your customers.
+
+## Histogram
+```{r}
+#| label: fig-purchase-hist
+#| echo: true
+#| fig-cap: "Distribution of customer purchase amounts."
+
+ggplot(data_clean, aes(x = purchase_amount)) +
+  geom_histogram(bins = 30, fill = "#cd5a7e", color = "white")
+```
+Figure @fig-purchase-hist shows the distribution of purchase amounts.
+
+# Histogram Result description
+As seen in the histogram, customers are mostly involved in spending **smaller amounts** or moderately **large amounts** while some of them involve themselves in huge spending. It is clear from this graph that spending by customers is normally moderate and the distribution is somewhat **skewed**. It is beneficial to have this kind of chart since it helps us understand the behaviour of the consumers and it serves as background information to comprehend the other findings in later analysis, for example, does marketing expenditure affect purchases. This type of chart was selected due to its simplicity.
+
+## Scatterplot
+```{r}
+#| label: fig-scatter
+#| echo: true
+#| fig-cap: "Relationship between marketing spend and purchase amount."
+
+ggplot(data_clean, aes(x = marketing_spend, y = purchase_amount)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "red")
+```
+Figure @fig-scatter shows the relationship between marketing spend and purchase amount.
+# Scatterplot Result description 
+From the scatter plot, we can tell that there is a slight positive correlation between **marketing expenditure** and **purchasing amount**, whereby those clients who have received more marketing expenditure tend to buy a little bit more than others. The use of this chart has contributed to addressing the research problem because it illustrates the presence or absence of a correlation between marketing expenditure and consumer behavior. 
